@@ -2,7 +2,6 @@ import os
 import subprocess
 import tempfile
 
-
 def bug_still_exists(candidate_sql: str, oracle_path: str) -> bool:
     candidate_path = None
 
@@ -33,5 +32,5 @@ def bug_still_exists(candidate_sql: str, oracle_path: str) -> bool:
         return False
 
     finally:
-        if candidate_path and os.path.exists(candidate_path):
+        if candidate_path is not None and os.path.exists(candidate_path):
             os.remove(candidate_path)

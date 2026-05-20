@@ -1,4 +1,5 @@
 import sqlglot
+from oracle import bug_still_exists
 
 def read_file(path: str) -> str:
     with open(path, "r", encoding="utf-8") as f:

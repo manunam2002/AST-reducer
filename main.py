@@ -1,6 +1,5 @@
 import argparse
-from reducer_logic import reduce_query
-
+from reducer_loop import reduce_query
 
 def main():
     parser = argparse.ArgumentParser()
@@ -10,7 +9,6 @@ def main():
     args = parser.parse_args()
 
     reduce_query(args.query, args.test)
-
 
 if __name__ == "__main__":
     main()
