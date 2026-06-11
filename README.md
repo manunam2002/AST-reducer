@@ -26,10 +26,11 @@ docker build -t ast-reducer .
 Rebuild the image whenever you change reducer code, for example:
 
 - `main.py`
-- `reducer_logic.py`
+- `reducer_loop.py`
 - `oracle.py`
-- `sql_utils.py`
+- `utils.py`
 - `removal_helpers.py`
+- `reduction_passes.py`
 - `requirements.txt`
 - `reducer`
 
@@ -40,14 +41,14 @@ You do not need to rebuild if you only change files inside `queries/`.
 From the project root:
 
 ```bash
-docker run -it --rm \
+docker run -it --platform linux/amd64 --rm \
   -v "$(pwd)":/workspace \
   -w /workspace \
   ast-reducer \
   reducer \
-    --query "queries/query1/original_test.sql" \
-    --reduced "queries/query1/reduced_test.sql" \
-    --test "queries/query1/test.sh"
+        --query "queries/query1/original_test.sql" \
+        --reduced "queries/query1/reduced_test.sql" \
+        --test "queries/query1/test.sh"
 ```
 
 The reducer modifies the file passed via `--query` in place. After the reducer finishes, `queries/query1/original_test.sql` contains the reduced query.
