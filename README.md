@@ -23,19 +23,6 @@ Build the reducer image from the project root:
 docker build -t ast-reducer .
 ```
 
-Rebuild the image whenever you change reducer code, for example:
-
-- `main.py`
-- `reducer_loop.py`
-- `oracle.py`
-- `utils.py`
-- `removal_helpers.py`
-- `reduction_passes.py`
-- `requirements.txt`
-- `reducer`
-
-You do not need to rebuild if you only change files inside `queries/`.
-
 ## Run the Reducer on ONE Query
 
 From the project root:
