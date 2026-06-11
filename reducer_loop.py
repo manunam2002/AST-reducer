@@ -1,10 +1,10 @@
 import sqlglot
 from sqlglot import exp
 
-from sql_utils import read_file, write_file, tokenize_sql#, untokenize_sqlove_sql_statement, remove_insert_rows, reduce_clause_items
+from utils import read_file, write_file
 from oracle import bug_still_exists
-
-from removal_helpers import linear_reduce, get_stmt_targets, remove_stmt, get_clause_targets, remove_clause, get_leaf_targets, remove_leaf, get_binary_targets, remove_binary, get_unnest_targets, remove_unnest, get_constantizer_targets, remove_constantizer, ddmin_reduce, get_select_expr_targets, remove_select_expr, get_in_list_targets, remove_in_item, get_cte_targets, remove_cte, statements_to_sql, remove_sql_statement, remove_insert_rows, reduce_clause_items, get_insert_row_targets, remove_insert_row, get_insert_modifier_targets, remove_insert_modifier
+from removal_helpers import *
+from reduction_passes import *
 
 oracle_cache = {}
 
@@ -36,7 +36,8 @@ def parse_sql(sql: str):
         result.append(s)
     return result
 
-def reduce_query(query_path: str, reduced_query_path: str, oracle_path: str) -> None:
+# Main reduction loop
+def reduce_query(query_path: str, oracle_path: str) -> None:
     sql = read_file(query_path)
     print("Original SQL:")
     print(sql)
@@ -44,18 +45,18 @@ def reduce_query(query_path: str, reduced_query_path: str, oracle_path: str) -> 
     statements = parse_sql(sql)
 
     passes = [
-    (get_stmt_targets,         remove_stmt,         "linear_once"),
-    (get_insert_row_targets,   remove_insert_row,   "ddmin"),
-    (get_insert_modifier_targets, remove_insert_modifier, "linear_once"),
-    (get_clause_targets,       remove_clause,       "linear_once"),
-    (get_cte_targets,          remove_cte,          "linear_once"),
-    (get_select_expr_targets,  remove_select_expr,  "ddmin"),
-    (get_in_list_targets,      remove_in_item,      "ddmin"),
-    (get_binary_targets,       remove_binary,       "linear"),
-    (get_unnest_targets,       remove_unnest,       "linear_once"),
-    (get_leaf_targets,         remove_leaf,         "linear"),
-    (get_constantizer_targets, remove_constantizer, "linear"),
-]
+        (get_stmt_targets,         remove_stmt,         "linear_once"),
+        (get_insert_row_targets,   remove_insert_row,   "ddmin"),
+        (get_insert_modifier_targets, remove_insert_modifier, "linear_once"),
+        (get_clause_targets,       remove_clause,       "linear_once"),
+        (get_cte_targets,          remove_cte,          "linear_once"),
+        (get_select_expr_targets,  remove_select_expr,  "ddmin"),
+        (get_in_list_targets,      remove_in_item,      "ddmin"),
+        (get_binary_targets,       remove_binary,       "linear"),
+        (get_unnest_targets,       remove_unnest,       "linear_once"),
+        (get_leaf_targets,         remove_leaf,         "linear"),
+        (get_constantizer_targets, remove_constantizer, "linear"),
+    ]
 
     oracle = lambda sql: cached_bug_still_exists(sql, oracle_path)
     changed = True
@@ -80,43 +81,7 @@ def reduce_query(query_path: str, reduced_query_path: str, oracle_path: str) -> 
                     changed = True
                     break
 
-        ## Pass 1: remove one whole SQL statement at a time
-        #for candidate_sql in remove_sql_statement(statements):
-        #    if cached_bug_still_exists(candidate_sql, oracle_path):
-        #        print("Reduced sql statement")
-        #        sql = candidate_sql
-        #        changed = True
-        #        break
-#
-        #if changed:
-        #    print(f"Current SQL:\n{statements_to_sql(statements)}")
-        #    continue
-#
-        ## Pass 2: reduce INSERT values
-        #for candidate_sql in remove_insert_rows(statements):
-        #    if cached_bug_still_exists(candidate_sql, oracle_path):
-        #        print("Reduced insert value")
-        #        sql = candidate_sql
-        #        changed = True
-        #        break
-#
-        #if changed:
-        #    print(f"Current SQL:\n{statements_to_sql(statements)}")
-        #    continue
-#
-        ## Pass 3: reduce WHERE/HAVING/GROUP BY/ORDER BY predicates
-        #for candidate_sql in reduce_clause_items(statements):
-        #    if cached_bug_still_exists(candidate_sql, oracle_path):
-        #        print("Reduced clause item")
-        #        sql = candidate_sql
-        #        changed = True
-        #        break
-#
-        #if changed:
-        #    print(f"Current SQL:\n{statements_to_sql(statements)}")
-        #    continue
-
     final_sql = statements_to_sql(statements)
     print("Final reduced SQL:")
     print(final_sql)
-    write_file(reduced_query_path, final_sql)
+    write_file(query_path, final_sql)
