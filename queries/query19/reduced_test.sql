@@ -1,0 +1,4 @@
+CREATE TABLE t0 (c0 INTEGER UNIQUE, c1 INTEGER, c2 TEXT UNIQUE, c3 TEXT UNIQUE);
+CREATE INDEX i8 ON t0(c1) WHERE NULL;
+INSERT INTO t0 (c0, c1, c2, c3) VALUES (894, 1, 'unique_0_578', 'unique_0_359'), (110, 1, 'unique_1_214', 'unique_1_463'), (588, 1, 'unique_2_657', 'unique_2_44'), (155, 1, 'unique_3_705', 'unique_3_765'), (580, NULL, 'unique_4_635', 'unique_4_302'), (936, 1, 'unique_5_819', 'unique_5_766'), (888, 1, 'unique_6_681', 'unique_6_32'), (125, NULL, 'unique_7_781', 'unique_7_39'), (209, 1, 'unique_8_74', 'unique_8_945'), (1, 1, '', '');
+SELECT 1 FROM t0 WHERE (t0.c1) IN (SELECT t0.c1 FROM t0)

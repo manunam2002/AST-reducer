@@ -1,0 +1,2 @@
+CREATE TABLE t0 (c1 INTEGER);
+SELECT subq1.c8 AS c9 FROM (SELECT TRUE AS c8 FROM (SELECT t1.c1 AS c5 FROM t0 AS t1 ORDER BY c5) AS subq0) AS subq1 WHERE subq1.c8 <> CASE subq1.c8 WHEN subq1.c8 = subq1.c8 THEN subq1.c8 WHEN subq1.c8 = subq1.c8 THEN subq1.c8 WHEN subq1.c8 <> subq1.c8 THEN subq1.c8 WHEN subq1.c8 = subq1.c8 THEN subq1.c8 WHEN 1 THEN subq1.c8 WHEN 1 THEN subq1.c8 END ORDER BY c9

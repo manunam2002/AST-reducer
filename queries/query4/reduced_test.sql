@@ -1,0 +1,4 @@
+CREATE TABLE t1 (col0 TEXT, col1 INTEGER, col2 TEXT, col3 INTEGER, col4 TEXT);
+INSERT INTO t1 (col1, col2, col3, col4) VALUES (1, '', -1, 'TOODVU');
+INSERT INTO t1 (col0, col1, col3, col4) VALUES ('', 1, NULL, '');
+SELECT LAG(-(-(-1))) OVER () AS win0, AVG(UPPER(1)) OVER (PARTITION BY col4) AS win1, ROW_NUMBER() OVER (RANGE CURRENT ROW) AS win2 FROM t1
