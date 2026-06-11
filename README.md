@@ -47,7 +47,6 @@ docker run -it --platform linux/amd64 --rm \
   ast-reducer \
   reducer \
         --query "queries/query1/original_test.sql" \
-        --reduced "queries/query1/reduced_test.sql" \
         --test "queries/query1/test.sh"
 ```
 
@@ -68,7 +67,6 @@ for d in queries/query*/; do
         ast-reducer \
         reducer \
             --query "${d}original_test.sql" \
-            --reduced "${d}reduced_test.sql" \
             --test "${d}test.sh"
     echo
 done
