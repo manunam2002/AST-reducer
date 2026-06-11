@@ -67,7 +67,7 @@ for d in queries/query*/; do
         ast-reducer \
         reducer \
             --query "${d}original_test.sql" \
-            --test "${d}test.sh"
-    echo
+            --test "${d}test.sh";
+    echo;
 done
 ```
