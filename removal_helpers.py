@@ -10,7 +10,7 @@ def statements_to_sql(statements) -> str:
                 parts.append(raw)
         else:
             try:
-                sql = s.sql(dialect='sqlite').strip()
+                sql = s.sql(dialect='sqlite', pretty=False).strip()
                 if sql:
                     parts.append(sql)
             except Exception:

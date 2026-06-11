@@ -30,7 +30,7 @@ def parse_sql(sql: str):
         # Filter malformed Updates (table name got lost)
         if isinstance(s, exp.Update) and s.args.get("this") is None:
             continue
-        rendered = s.sql(dialect='sqlite').strip()
+        rendered = s.sql(dialect='sqlite', pretty=False).strip()
         if not rendered:
             continue
         result.append(s)
