@@ -40,13 +40,11 @@ You do not need to rebuild if you only change files inside `queries/`.
 From the project root:
 
 ```bash
-docker run -it --rm \
+docker run -it --platform linux/amd64 --rm \
   -v "$(pwd)":/workspace \
   -w /workspace \
   ast-reducer \
-  reducer \
-    --query queries/query1/original_test.sql \
-    --test queries/query1/test.sh
+  reducer --query queries/query3/original_test.sql --reduced queries/query3/reduced_test.sql --test queries/query3/test.sh
 ```
 
 The reducer modifies the file passed via `--query` in place. After the reducer finishes, `queries/query1/original_test.sql` contains the reduced query.
@@ -67,7 +65,7 @@ for d in queries/query*/; do
         ast-reducer \
         reducer \
             --query "${d}original_test.sql" \
-            --test "${d}test.sh";
+            --test "${d}test.sh" --reduced "${d}reduced_test.sql";
 
     echo;
 done
